@@ -19,7 +19,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onChange: (message) => {
-      console.log(message);
       dispatch({
         type: DISPATCH_MESSAGE_UPDATE,
         message

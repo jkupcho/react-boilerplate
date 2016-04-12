@@ -1,25 +1,27 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { routerMiddleware, routerReducer } from 'react-router-redux';
+
+function createReducer() {
+  return combineReducers({
+    ...require('./reducers/index'),
+    routing: routerReducer
+  });
+}
 
 export default function configureStore(initialState = {}, history) {
-  // let finalCreateStore;
-  // if (process.env.NODE_ENV !== 'production') {
-  //   const { persistState } = require('redux-devtools');
-  //   finalCreateStore = compose(
-  //     persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
-  //   );
-  // } else {
-  //   finalCreateStore = applyMiddleware()(createStore);
-  // }
+  const createStoreWithMiddleware = compose(
+    applyMiddleware(routerMiddleware(history))
+  )(createStore);
 
-  const reducer = combineReducers(require('./reducers'));
-  const store = createStore(reducer, initialState);
+  const store = createStoreWithMiddleware(createReducer(), initialState);
 
   if (module.hot) {
-    module.hot.accept('./reducers', () => {
-      const nextReducer = combineReducers(require('./reducers'));
+    module.hot.accept('./reducers/index', () => {
+      const nextReducer = createStoreWithMiddleware(createReducer(), initialState);
       store.replaceReducer(nextReducer);
     });
   }
 
+  store.asyncReducers = {};
   return store;
 }
