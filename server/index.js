@@ -5,7 +5,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 
 const app = express();
 
-const webpackConfig = isDev ? 
+const webpackConfig = isDev ?
   require('../config/webpack.dev.config.js') :
   require('../config/webpack.prod.config.js');
 
