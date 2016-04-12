@@ -1,27 +1,23 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import { routerMiddleware, routerReducer } from 'react-router-redux';
+import { routerReducer } from 'react-router-redux'
 
 function createReducer() {
   return combineReducers({
-    ...require('./reducers/index'),
+    ...require('./reducers'),
     routing: routerReducer
   });
 }
 
 export default function configureStore(initialState = {}, history) {
-  const createStoreWithMiddleware = compose(
-    applyMiddleware(routerMiddleware(history))
-  )(createStore);
-
-  const store = createStoreWithMiddleware(createReducer(), initialState);
+  const reducer = createReducer();
+  const store = createStore(reducer, initialState);
 
   if (module.hot) {
-    module.hot.accept('./reducers/index', () => {
-      const nextReducer = createStoreWithMiddleware(createReducer(), initialState);
+    module.hot.accept('./reducers', () => {
+      const nextReducer = createReducer();
       store.replaceReducer(nextReducer);
     });
   }
 
-  store.asyncReducers = {};
   return store;
 }
