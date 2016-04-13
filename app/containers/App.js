@@ -4,10 +4,10 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 import configureStore from '../store';
-import Message from 'Message';
-import Base from 'Base';
-import About from 'About';
-import NotFound from 'NotFound';
+import Message from './Message';
+import Base from './Base';
+import About from './About';
+import NotFound from './NotFound';
 
 const initialState = {};
 const store = configureStore(initialState);
